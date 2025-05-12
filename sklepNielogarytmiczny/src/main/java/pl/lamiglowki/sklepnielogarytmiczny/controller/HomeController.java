@@ -47,6 +47,7 @@ public class HomeController {
             session.setAttribute("cart", cart);
         }
         model.addAttribute("items", itemRepository.findAll());
-        return "home";
+
+        return "redirect:/";
     }
 }
