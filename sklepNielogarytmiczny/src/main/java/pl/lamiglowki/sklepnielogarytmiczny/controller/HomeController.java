@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
+import pl.lamiglowki.sklepnielogarytmiczny.Cart;
 import pl.lamiglowki.sklepnielogarytmiczny.model.Item;
 import pl.lamiglowki.sklepnielogarytmiczny.repository.ItemRepository;
 
@@ -19,10 +20,12 @@ import java.util.Optional;
 public class HomeController {
 
     private final ItemRepository itemRepository;
+    private final Cart cart;
 
     @Autowired
-    public HomeController(ItemRepository itemRepository) {
+    public HomeController(ItemRepository itemRepository, Cart cart) {
         this.itemRepository = itemRepository;
+        this.cart = cart;
     }
 
     @GetMapping("/")
@@ -35,18 +38,22 @@ public class HomeController {
     }
 
     @GetMapping("/add/{itemId}")
-    public String addItemToCart(@PathVariable("itemId") Long itemId, Model model, HttpSession session) {
-        List<Item> cart = (List<Item>) session.getAttribute("cart");
-        if (cart==null) {
-            cart = new ArrayList<>();
-        }
+    public String addItemToCart(@PathVariable("itemId") Long itemId/*, Model model/*, HttpSession session*/) {
+//        List<Item> cart = (List<Item>) session.getAttribute("cart");
+//        if (cart==null) {
+//            cart = new ArrayList<>();
+//        }
+//        Optional<Item> oItem = itemRepository.findById(itemId);
+//        if (oItem.isPresent()) {
+//            Item item = oItem.get();
+//            cart.add(item);
+//            session.setAttribute("cart", cart);
+//        }
         Optional<Item> oItem = itemRepository.findById(itemId);
         if (oItem.isPresent()) {
-            Item item = oItem.get();
-            cart.add(item);
-            session.setAttribute("cart", cart);
+            cart.addItem(oItem.get());
         }
-        model.addAttribute("items", itemRepository.findAll());
+        // model.addAttribute("items", itemRepository.findAll());
 
         return "redirect:/";
     }
