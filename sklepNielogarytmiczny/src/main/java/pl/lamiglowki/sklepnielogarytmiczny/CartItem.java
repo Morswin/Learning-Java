@@ -24,6 +24,9 @@ public class CartItem {
         counter--;
         recalculate();
     }
+    public boolean isEquals(Item item) {
+        return this.item.getId().equals(item.getId());
+    }
     public void recalculate() {
         price = item.getPrice().multiply(new BigDecimal(counter));
     }

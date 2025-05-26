@@ -5,23 +5,34 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import pl.lamiglowki.sklepnielogarytmiczny.model.Item;
+import pl.lamiglowki.sklepnielogarytmiczny.repository.ItemRepository;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Component
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class Cart {
+//    private final ItemRepository itemRepository;
     private ArrayList<CartItem> cartItems = new ArrayList<CartItem>(){};
     private BigDecimal sum;
     private int counter = 0;
+//    public Cart(ItemRepository itemRepository) {
+//        this.itemRepository = itemRepository;
+//        List<Item> items = new ArrayList<>(itemRepository.findAll());
+//        for (Item item : items) {
+//            addItem(item);
+//            addItem(item);
+//        }
+//    }
     public void addItem(Item item) {
 //        System.out.println(cartItems);
         if (!cartItems.isEmpty()) {
             boolean found = false;
             for (CartItem cartItem : cartItems) {
-                if (cartItem.getItem().getId().equals(item.getId())) {
+                if (cartItem.isEquals(item)) {
                     cartItem.increaseCounter();
                     found = true;
                     break;
@@ -33,7 +44,6 @@ public class Cart {
         }
         else {
             CartItem nowy = new CartItem(item);
-//            nowy.increaseCounter();
             cartItems.add(nowy);
         }
         recalculatePriceAndCounter();
@@ -41,7 +51,7 @@ public class Cart {
     public void removeItem(Item item) {
         if (!cartItems.isEmpty()) {
             for (CartItem cartItem : cartItems) {
-                if (cartItem.getItem().getId().equals(item.getId())) {
+                if (cartItem.isEquals(item)) {
                     cartItem.decreaseCounter();
                     if (cartItem.getCounter() <= 0) {
                         cartItems.remove(cartItem);
@@ -53,15 +63,8 @@ public class Cart {
         }
     }
     public void recalculatePriceAndCounter() {
-        counter = 0;
-        sum = new BigDecimal(0);
-        System.out.println("Przed przeliczeniem: " + counter);
-        for (CartItem cartItem : cartItems) {
-            counter += cartItem.getCounter();
-            sum = sum.add(cartItem.getPrice());
-            System.out.println("W trakcie: " + counter);
-        }
-        System.out.println("Po przeliczeniu: " + counter);
+        this.counter = this.cartItems.stream().mapToInt(CartItem::getCounter).sum();
+        this.sum = this.cartItems.stream().map(CartItem::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
     public int getCounter() {
         return this.counter;

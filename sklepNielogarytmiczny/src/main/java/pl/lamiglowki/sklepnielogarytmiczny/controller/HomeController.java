@@ -52,6 +52,7 @@ public class HomeController {
         Optional<Item> oItem = itemRepository.findById(itemId);
         if (oItem.isPresent()) {
             cart.addItem(oItem.get());
+//            cart.removeItem(oItem.get());
         }
         // model.addAttribute("items", itemRepository.findAll());
 
