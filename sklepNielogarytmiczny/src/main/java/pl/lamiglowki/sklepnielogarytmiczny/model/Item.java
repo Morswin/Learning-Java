@@ -27,4 +27,12 @@ public class Item {
         this.price = price;
         this.imgURL = imgURL;
     }
+
+    public BigDecimal getPrice() {
+        return this.price;
+    }
+
+    public Long getId() {
+        return id;
+    }
 }
