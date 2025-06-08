@@ -3,6 +3,7 @@ package pl.lamiglowki.sklepnielogarytmiczny.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.lamiglowki.sklepnielogarytmiczny.Cart;
+import pl.lamiglowki.sklepnielogarytmiczny.ItemOperation;
 import pl.lamiglowki.sklepnielogarytmiczny.model.Item;
 import pl.lamiglowki.sklepnielogarytmiczny.repository.ItemRepository;
 
@@ -24,24 +25,26 @@ public class CartService {
         return itemRepository.findAll();
     }
 
-    public void addItemToCart(Long itemId) {
-        Optional<Item> oItem = itemRepository.findById(itemId);
-        if (oItem.isPresent()) {
-            cart.addItem(oItem.get());
-        }
-    }
-
-    public void removeItemFromCart(Long itemId) {
-        Optional<Item> oItem = itemRepository.findById(itemId);
-        if (oItem.isPresent()) {
-            cart.removeItem(oItem.get());
-        }
-    }
-
-    public void removeItemCompletelyFromCart(Long itemId) {
-        Optional<Item> oItem = itemRepository.findById(itemId);
-        if (oItem.isPresent()) {
-            cart.removeItemCompletely(oItem.get());
+    public void itemOperation(Long itemId, ItemOperation itemOperation) {
+        switch (itemOperation) {
+            case INCREASE -> {
+                Optional<Item> oItem = itemRepository.findById(itemId);
+                if (oItem.isPresent()) {
+                    cart.addItem(oItem.get());
+                }
+            }
+            case DECREASE -> {
+                Optional<Item> oItem = itemRepository.findById(itemId);
+                if (oItem.isPresent()) {
+                    cart.removeItem(oItem.get());
+                }
+            }
+            case REMOVE -> {
+                Optional<Item> oItem = itemRepository.findById(itemId);
+                if (oItem.isPresent()) {
+                    cart.removeItemCompletely(oItem.get());
+                }
+            }
         }
     }
 }

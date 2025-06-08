@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import pl.lamiglowki.sklepnielogarytmiczny.ItemOperation;
 import pl.lamiglowki.sklepnielogarytmiczny.service.CartService;
 
 import java.util.Optional;
@@ -24,19 +25,19 @@ public class OrderController {
 
     @GetMapping("/add/{itemId}")
     public String addItemToCart(@PathVariable("itemId") Long itemId/*, Model model/*, HttpSession session*/) {
-        cartService.addItemToCart(itemId);
+        cartService.itemOperation(itemId, ItemOperation.INCREASE);
         return "redirect:/order/cart";
     }
 
     @GetMapping("/remove/{itemId}")
     public String removeItemFromCart(@PathVariable("itemId") Long itemId) {
-        cartService.removeItemFromCart(itemId);
+        cartService.itemOperation(itemId, ItemOperation.DECREASE);
         return "redirect:/order/cart";
     }
 
     @GetMapping("/removeCompletely/{itemId}")
     public String removeItemCompletelyFromCart(@PathVariable("itemId") long itemId) {
-        cartService.removeItemCompletelyFromCart(itemId);
+        cartService.itemOperation(itemId, ItemOperation.REMOVE);
         return "redirect:/order/cart";
     }
 }

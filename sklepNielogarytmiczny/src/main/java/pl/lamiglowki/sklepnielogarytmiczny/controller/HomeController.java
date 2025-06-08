@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import pl.lamiglowki.sklepnielogarytmiczny.ItemOperation;
 import pl.lamiglowki.sklepnielogarytmiczny.model.Item;
 import pl.lamiglowki.sklepnielogarytmiczny.service.CartService;
 import java.util.List;
@@ -25,7 +26,7 @@ public class HomeController {
 
     @GetMapping("/add/{itemId}")
     public String addItemToCart(@PathVariable("itemId") Long itemId/*, Model model/*, HttpSession session*/) {
-        cartService.addItemToCart(itemId);
+        cartService.itemOperation(itemId, ItemOperation.INCREASE);
         return "redirect:/";
     }
 }
