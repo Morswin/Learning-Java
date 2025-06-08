@@ -11,27 +11,26 @@
 <div class="main-content">
 
     <table cellspacing="0" style="border: 0px">
-        <tr>
+        <tr th:each="cartItem : ${@cart.cartItems}">
             <td>1</td>
             <td>
-                <img src="https://iheartcraftythings.com/wp-content/uploads/2021/05/Pencil-DRAWING-%E2%80%93-STEP-10.jpg">
+                <img th:src="@{${cartItem.item.imgURL}}">
             </td>
-            <td></td>
+            <td th:text="${cartItem.item.name}"></td>
             <td style="display: flex; padding-top: 10px">
-                <p>1</p>
+                <p th:text="${cartItem.counter}"></p>
             </td>
-            <td>2</td>
-
+            <td th:text="${cartItem.price}"></td>
         </tr>
     </table>
 
     <div class="summary">
-        <p><span>Do zapłaty</span><span>10</span>zł</p>
+        <p><span>Do zapłaty</span><span th:text="${@cart.sum}"></span>zł</p>
     </div>
 
     <div class="summary">
 
-        <form>
+        <form th:action="@{/order/saveorder}" method="post">
             <label>Imię</label>
             <input type="text" name="firstName" required>
             <label>Nazwisko</label>
