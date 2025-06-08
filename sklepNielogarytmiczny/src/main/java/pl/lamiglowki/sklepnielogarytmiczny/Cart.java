@@ -5,11 +5,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import pl.lamiglowki.sklepnielogarytmiczny.model.Item;
-import pl.lamiglowki.sklepnielogarytmiczny.repository.ItemRepository;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Getter
@@ -38,11 +36,19 @@ public class Cart {
                 .findFirst()
                 .ifPresent(ci -> {
                     ci.decreaseCounter();
-                    if (ci.getCounter() <- 0) {
+                    if (ci.getCounter() <= 0) {
                         cartItems.remove(ci);
                     }
-                    recalculatePriceAndCounter();
                 });
+        recalculatePriceAndCounter();
+    }
+
+    public void removeItemCompletely(Item item) {
+        cartItems.stream()
+                .filter(ci -> ci.isEquals(item))
+                .findFirst()
+                .ifPresent(ci -> cartItems.remove(ci));
+        recalculatePriceAndCounter();
     }
 
     public void recalculatePriceAndCounter() {
