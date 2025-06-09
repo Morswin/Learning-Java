@@ -1,17 +1,20 @@
 package pl.lamiglowki.sklepnielogarytmiczny.model.order;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.io.Serializable;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class OrderItem {
+@Table(name="orderitem")
+@Data
+public class OrderItem implements Serializable {
     public OrderItem(Long orderId, Long itemId, int amount) {
         this.orderItemId = orderItemId;
         this.orderId = orderId;
@@ -20,7 +23,7 @@ public class OrderItem {
     }
 
     @Id
-    @GeneratedValue
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long orderItemId;
     private Long orderId;
     private Long itemId;
