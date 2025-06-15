@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import pl.lamiglowki.sklepnielogarytmiczny.ItemOperation;
 import pl.lamiglowki.sklepnielogarytmiczny.dto.OrderDto;
 import pl.lamiglowki.sklepnielogarytmiczny.service.CartService;
+import pl.lamiglowki.sklepnielogarytmiczny.service.OrderService;
 
 import java.util.Optional;
 
@@ -15,9 +16,11 @@ import java.util.Optional;
 @RequestMapping("/order")
 public class OrderController {
     private final CartService cartService;
+    private final OrderService orderService;
 
-    public OrderController(CartService cartService) {
+    public OrderController(CartService cartService, OrderService orderService) {
         this.cartService = cartService;
+        this.orderService = orderService;
     }
 
     @GetMapping("/cart")
@@ -50,6 +53,7 @@ public class OrderController {
 
     @PostMapping("/saveorder")
     public String saveOrder(OrderDto orderDto) {
+        orderService.saveOrder(orderDto);
         return "redirect:/";
     }
 }

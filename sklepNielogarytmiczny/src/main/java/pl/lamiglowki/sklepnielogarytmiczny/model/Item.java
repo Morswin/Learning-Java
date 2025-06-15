@@ -1,7 +1,5 @@
 package pl.lamiglowki.sklepnielogarytmiczny.model;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,10 +14,12 @@ import java.math.BigDecimal;
 @Entity
 public class Item {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
     private Long id;
     private String name;
     private BigDecimal price;
+    @Column(name = "imgurl")
     private String imgURL;
 
     public Item(String name, BigDecimal price, String imgURL) {

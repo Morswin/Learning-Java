@@ -59,4 +59,10 @@ public class Cart {
     public int getCounter() {
         return this.counter;
     }
+
+    public void cleanCart() {
+        cartItems.clear();
+        counter = 0;
+        sum = BigDecimal.ZERO;
+    }
 }
